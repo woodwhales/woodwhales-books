@@ -74,6 +74,7 @@ public class IndexController {
                         .forEach(childrenFile -> {
                                     sb.append(fileName(childrenFile, rootPath + "/"));
                                     sb.append("\r\n");
+                                    sb.append("\r\n");
                                 }
                         );
 
@@ -87,6 +88,7 @@ public class IndexController {
             }
         } else {
             sb.append(fileName(subFile, rootPath + "/"));
+            sb.append("\r\n");
             sb.append("\r\n");
         }
     }
