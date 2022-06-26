@@ -69,7 +69,6 @@ public class IndexController {
 
             File[] files = subFile.listFiles();
             if (Objects.nonNull(files)) {
-
                 DataTool.filter(files, childrenFile -> !childrenFile.isDirectory())
                         .forEach(childrenFile -> {
                                     sb.append(fileName(childrenFile, rootPath + "/"));
@@ -83,7 +82,8 @@ public class IndexController {
                 List<File> childrenFileList = DataTool.filter(files, File::isDirectory);
                 for (File childrenFile : childrenFileList) {
                     level.incrementAndGet();
-                    list(sb, level, childrenFile, rootPath + "/" + childrenFile.getName());
+                    list(sb, new AtomicInteger(level.get()), childrenFile, rootPath + "/" + childrenFile.getName());
+                    level.decrementAndGet();
                 }
             }
         } else {
