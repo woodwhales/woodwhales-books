@@ -32,6 +32,7 @@ public class IndexController {
         ignoreFileNameSet.add("LICENSE");
         ignoreFileNameSet.add("README.md");
         ignoreFileNameSet.add(".idea");
+        ignoreFileNameSet.add(".gitattributes");
     }
 
     @PostMapping("md")
@@ -52,10 +53,12 @@ public class IndexController {
         List<File> fileList = DataTool.filter(files, myFile -> !ignoreFileNameSet.contains(myFile.getName()));
         String rootPath = "";
         StringBuffer sb = new StringBuffer();
+        sb.append("# woodwhales-books\n" +
+                "> 图书丈量世界").append("\n");
         for (File subFile : fileList) {
             AtomicInteger level = new AtomicInteger(1);
             list(sb, level, subFile, rootPath + "/" + subFile.getName());
-            sb.append("\r\n");
+            sb.append("\n");
         }
         log.info("{}", sb.toString());
         return RespVO.success(sb.toString());
@@ -65,19 +68,19 @@ public class IndexController {
         if (subFile.isDirectory()) {
             level.incrementAndGet();
             sb.append(this.title(level) + subFile.getName());
-            sb.append("\r\n");
+            sb.append("\n");
 
             File[] files = subFile.listFiles();
             if (Objects.nonNull(files)) {
                 DataTool.filter(files, childrenFile -> !childrenFile.isDirectory())
                         .forEach(childrenFile -> {
                                     sb.append(fileName(childrenFile, rootPath + "/"));
-                                    sb.append("\r\n");
-                                    sb.append("\r\n");
+                                    sb.append("\n");
+                                    sb.append("\n");
                                 }
                         );
 
-                sb.append("\r\n");
+                sb.append("\n");
 
                 List<File> childrenFileList = DataTool.filter(files, File::isDirectory);
                 for (File childrenFile : childrenFileList) {
@@ -88,8 +91,8 @@ public class IndexController {
             }
         } else {
             sb.append(fileName(subFile, rootPath + "/"));
-            sb.append("\r\n");
-            sb.append("\r\n");
+            sb.append("\n");
+            sb.append("\n");
         }
     }
 
