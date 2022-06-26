@@ -57,7 +57,9 @@ public class IndexController {
                 "> 图书丈量世界").append("\n");
         for (File subFile : fileList) {
             AtomicInteger level = new AtomicInteger(1);
-            list(sb, level, subFile, rootPath + "/" + subFile.getName());
+            level.incrementAndGet();
+            list(sb, new AtomicInteger(level.get()), subFile, rootPath + "/" + subFile.getName());
+            level.decrementAndGet();
             sb.append("\n");
         }
         log.info("{}", sb.toString());
@@ -66,10 +68,8 @@ public class IndexController {
 
     private void list(StringBuffer sb, AtomicInteger level, File subFile, String rootPath) {
         if (subFile.isDirectory()) {
-            level.incrementAndGet();
             sb.append(this.title(level) + subFile.getName());
             sb.append("\n");
-
             File[] files = subFile.listFiles();
             if (Objects.nonNull(files)) {
                 DataTool.filter(files, childrenFile -> !childrenFile.isDirectory())
